@@ -1,12 +1,4 @@
 module Lexicon
-	def convert_number(object)
-		begin
-			return Integer(object)
-		rescue
-			return nil
-		end
-	end
-	
 	def Lexicon.scan(string)
 		words = [['direction','north'],
 		['direction','south'],
@@ -23,17 +15,21 @@ module Lexicon
 		string = string.split
 		
 		string.each do |a|
-			if convert_number(string).nil?
+			a1 = a.downcase
+			catch :found do
+			if (a1 =~ /\d/).nil?
 				words.each do |b|
-					if b[1] == a
+					if b[1] == a1
 						ary.push(b)
+						throw :found
 					end
 				end
+				ary.push(['error',a])
 			else
-				ary = [['number',convert_number(string)]]
+				ary.push(["number",a.to_i])	
+			end
 			end
 		end
-		
 	return ary
 	end
 end
